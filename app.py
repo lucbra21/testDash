@@ -1,12 +1,17 @@
+# Archivo principal de tu aplicación Dash (app.py)
 import dash
 from dash import dcc, html, dash_table
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
 import numpy as np
+import os
 
 # Inicializar la aplicación Dash
 app = dash.Dash(__name__, suppress_callback_exceptions=True)
+
+# Necesario para Render (y otros servicios de hosting)
+server = app.server
 
 # Datos de ejemplo
 np.random.seed(42)
@@ -251,6 +256,8 @@ app.layout = html.Div([
     'flexDirection': 'column'
 })
 
-# Ejecutar la aplicación
+# Para ejecutarlo localmente
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Obtener puerto del entorno (Render lo establecerá) o usar 8050 como predeterminado
+    port = int(os.environ.get("PORT", 8050))
+    app.run_server(debug=False, host='0.0.0.0', port=port)
